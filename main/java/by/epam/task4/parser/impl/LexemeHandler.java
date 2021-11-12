@@ -27,18 +27,22 @@ public enum LexemeHandler implements ComponentHandler {
         TextComposite composite = new TextComposite(LEXEME);
         String input = lexeme.strip();
         Matcher wordMatcher = Pattern.compile(WORD_REGEX).matcher(input);
+
         if (wordMatcher.find()) {
-            String[] punctuationAtBeginning = wordMatcher.group(1).split(SYMBOL.getDelimiter());
-            for (String symbol : punctuationAtBeginning) {
-                composite.add(symbolHandler.handleRequest(symbol));
-            }
-
-            String word = wordMatcher.group(2);
-            composite.add(wordHandler.handleRequest(word));
-
-            String[] punctuationAtEnd = wordMatcher.group(3).split(SYMBOL.getDelimiter());
-            for (String symbol : punctuationAtEnd) {
-                composite.add(symbolHandler.handleRequest(symbol));
+            int countOfGroups = 3;
+            int wordGroup = 2;
+            for (int i = 1; i <= countOfGroups; i++) {
+                if (i == wordGroup) {
+                    String word = wordMatcher.group(i);
+                    composite.add(wordHandler.handleRequest(word));
+                } else {
+                    String punctuation = wordMatcher.group(i);
+                    if (!punctuation.isEmpty()) {
+                        for (String symbol : punctuation.split(SYMBOL.getDelimiter())) {
+                            composite.add(symbolHandler.handleRequest(symbol));
+                        }
+                    }
+                }
             }
         } else {
             Matcher sentencePunctuationMatcher = Pattern.compile(SENTENCE_PUNCTUATION_REGEX).matcher(input);
@@ -52,6 +56,7 @@ public enum LexemeHandler implements ComponentHandler {
             }
             composite.add(expressionHandler.handleRequest(input));
         }
+
         logger.log(Level.INFO, "output composite (lexeme) -> " + composite);
         return composite;
     }
