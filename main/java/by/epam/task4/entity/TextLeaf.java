@@ -38,6 +38,24 @@ public class TextLeaf implements Component {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TextLeaf textLeaf = (TextLeaf) o;
+
+        if (character != textLeaf.character) return false;
+        return elementType == textLeaf.elementType;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = elementType.hashCode();
+        result = 31 * result + (int) character;
+        return result;
+    }
+
+    @Override
     public String toString() {
         return new StringJoiner(", ", TextLeaf.class.getSimpleName() + "[", "]")
                 .add("elementType=" + elementType)

@@ -17,4 +17,27 @@ public enum ElementType {
     public String getDelimiter() {
         return delimiter;
     }
+
+    public boolean isValidComponentToAdd(ElementType type) {
+        switch (this) {
+            case TEXT -> {
+                return type == PARAGRAPH;
+            }
+            case PARAGRAPH -> {
+                return type == SENTENCE;
+            }
+            case SENTENCE -> {
+                return type == LEXEME;
+            }
+            case LEXEME -> {
+                return type == WORD || type == EXPRESSION || type == SYMBOL;
+            }
+            case WORD, EXPRESSION -> {
+                return type == SYMBOL;
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
 }

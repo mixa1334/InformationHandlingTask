@@ -1,11 +1,8 @@
-package by.epam.task4.parser.impl;
+package by.epam.task4.handler.impl;
 
 import by.epam.task4.entity.Component;
 import by.epam.task4.entity.TextComposite;
-import by.epam.task4.parser.ComponentHandler;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import by.epam.task4.handler.ComponentHandler;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +11,6 @@ import static by.epam.task4.entity.ElementType.*;
 
 public enum LexemeHandler implements ComponentHandler {
     INSTANCE;
-    private static final Logger logger = LogManager.getLogger();
     private static final String WORD_REGEX = "(?U)(^\\p{Punct}*)([\\w-]+)(\\p{Punct}*$)";
     private static final String SENTENCE_PUNCTUATION_REGEX = "\\.{1,3}|[?!,;:]$";
     private final SymbolHandler symbolHandler = SymbolHandler.INSTANCE;
@@ -23,7 +19,6 @@ public enum LexemeHandler implements ComponentHandler {
 
     @Override
     public Component handleRequest(String lexeme) {
-        logger.log(Level.INFO, "input lexeme -> " + lexeme);
         TextComposite composite = new TextComposite(LEXEME);
         String input = lexeme.strip();
         Matcher wordMatcher = Pattern.compile(WORD_REGEX).matcher(input);
@@ -57,7 +52,6 @@ public enum LexemeHandler implements ComponentHandler {
             composite.add(expressionHandler.handleRequest(input));
         }
 
-        logger.log(Level.INFO, "output composite (lexeme) -> " + composite);
         return composite;
     }
 }

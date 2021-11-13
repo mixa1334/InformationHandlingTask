@@ -30,6 +30,9 @@ public class TextComposite implements Component {
 
     @Override
     public boolean add(Component component) {
+        if (!elementType.isValidComponentToAdd(component.getElementType())) {
+            throw new IllegalArgumentException();
+        }
         return components.add(component);
     }
 
@@ -40,12 +43,30 @@ public class TextComposite implements Component {
 
     @Override
     public List<Component> getChildren() {
-        return components;
+        return new ArrayList<>(components);
     }
 
     @Override
     public ElementType getElementType() {
         return elementType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TextComposite composite = (TextComposite) o;
+
+        if (elementType != composite.elementType) return false;
+        return components.equals(composite.components);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = elementType != null ? elementType.hashCode() : 0;
+        result = 31 * result + components.hashCode();
+        return result;
     }
 
     @Override

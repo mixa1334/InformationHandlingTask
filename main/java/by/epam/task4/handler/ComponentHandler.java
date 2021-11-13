@@ -1,4 +1,4 @@
-package by.epam.task4.parser;
+package by.epam.task4.handler;
 
 import by.epam.task4.entity.Component;
 

@@ -1,18 +1,18 @@
-package by.epam.task4.parser.impl;
+package by.epam.task4.handler.impl;
 
 import by.epam.task4.entity.Component;
-import by.epam.task4.parser.ComponentHandler;
+import by.epam.task4.handler.ComponentHandler;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
 
-public class WordHandlerTest {
+public class ExpressionHandlerTest {
 
     @Test
     public void testHandleRequest() {
         ComponentHandler handler = WordHandler.INSTANCE;
 
-        String expected = "hello";
+        String expected = "1==2";
 
         Component word = handler.handleRequest(expected);
 

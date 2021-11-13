@@ -1,7 +1,7 @@
-package by.epam.task4.parser.impl;
+package by.epam.task4.handler.impl;
 
 import by.epam.task4.entity.Component;
-import by.epam.task4.parser.ComponentHandler;
+import by.epam.task4.handler.ComponentHandler;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
