@@ -43,7 +43,6 @@ public class TextLeaf implements Component {
         if (o == null || getClass() != o.getClass()) return false;
 
         TextLeaf textLeaf = (TextLeaf) o;
-
         if (character != textLeaf.character) return false;
         return elementType == textLeaf.elementType;
     }

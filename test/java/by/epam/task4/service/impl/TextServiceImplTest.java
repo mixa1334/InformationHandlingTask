@@ -8,6 +8,8 @@ import by.epam.task4.service.TextService;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Map;
+
 import static org.testng.Assert.*;
 
 public class TextServiceImplTest {
@@ -49,5 +51,11 @@ public class TextServiceImplTest {
 
     @Test
     public void testFindAllSameWordsAndTheirCount() {
+        String word = "it";
+        int expected = 6;
+        Map<String, Integer> result = textService.findAllSameWordsAndTheirCount(text).get();
+        int actual = result.get(word);
+
+        assertEquals(actual, expected);
     }
 }

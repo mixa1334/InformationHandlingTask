@@ -7,10 +7,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static by.epam.task4.entity.ElementType.*;
 
@@ -57,15 +54,11 @@ public class TextServiceImpl implements TextService {
     @Override
     public int deleteSentencesWithLessWordCount(Component textComposite, int wordCount) {
         int result = 0;
-        if (textComposite.getElementType() != TEXT && textComposite.getElementType() != PARAGRAPH) {
+        if (textComposite.getElementType() != TEXT) {
             return 0;
         }
 
         for (Component component : textComposite.getChildren()) {
-            if (component.getElementType() == PARAGRAPH) {
-                result += deleteSentencesWithLessWordCount(component, wordCount);
-                continue;
-            }
             int count = countWordsInSentence(component);
             logger.log(Level.DEBUG, "count of words: " + count + " in sentence -> " + component);
             if (count < wordCount) {
@@ -78,8 +71,36 @@ public class TextServiceImpl implements TextService {
     }
 
     @Override
-    public Optional<Map<Component, Integer>> findAllSameWordsAndTheirCount(Component textComposite) {
-        return Optional.empty();
+    public Optional<Map<String, Integer>> findAllSameWordsAndTheirCount(Component textComposite) {
+        if (textComposite.getElementType() != TEXT) {
+            return Optional.empty();
+        }
+
+        Map<String, Integer> result = null;
+
+        for (Component paragraph : textComposite.getChildren()) {
+            for (Component sentence : paragraph.getChildren()) {
+                for (Component lexeme : sentence.getChildren()) {
+                    for (Component element : lexeme.getChildren()) {
+                        if (element.getElementType() == WORD) {
+                            if (result == null) {
+                                result = new HashMap<>();
+                            }
+                            int count = 1;
+                            String word = element.convertToString().toLowerCase();
+                            if (result.containsKey(word)) {
+                                count += result.get(word);
+                            }
+                            result.put(word, count);
+                        }
+                    }
+                }
+            }
+        }
+
+        logger.log(Level.DEBUG, "word and their count -> " + result);
+
+        return Optional.ofNullable(result);
     }
 
     private int countWordsInSentence(Component component) {

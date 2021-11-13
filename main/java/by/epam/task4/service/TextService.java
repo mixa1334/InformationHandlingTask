@@ -12,5 +12,5 @@ public interface TextService {
 
     int deleteSentencesWithLessWordCount(Component textComposite, int wordCount);
 
-    Optional<Map<Component, Integer>> findAllSameWordsAndTheirCount(Component textComposite);
+    Optional<Map<String, Integer>> findAllSameWordsAndTheirCount(Component textComposite);
 }
