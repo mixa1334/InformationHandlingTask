@@ -8,8 +8,6 @@ import by.epam.task4.service.TextService;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
 import static org.testng.Assert.*;
 
 public class TextServiceImplTest {
@@ -25,17 +23,19 @@ public class TextServiceImplTest {
 
     @Test
     public void testSortTextParagraphsByNumberOfSentences() {
-        List<Component> children = text.getChildren();
-        Component expected = children.get(children.size() - 2);
-        children = textService.sortTextParagraphsByNumberOfSentences(text).get().getChildren();
-        Component actual = children.get(0);
+        Component expected = text.getChildren().get(2);
+        Component actual = textService.sortTextParagraphsByNumberOfSentences(text).get().getChildren().get(0);
 
         assertEquals(actual, expected);
     }
 
     @Test
     public void testFindSentenceWithLongestWord() {
-        List<Component> children = text.getChildren();
+        Component expected = text.getChildren().get(2).getChildren().get(0);
+        Component actual = textService.findSentenceWithLongestWord(text).get();
+
+
+        assertEquals(actual, expected);
     }
 
     @Test

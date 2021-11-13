@@ -35,25 +35,19 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public Optional<Component> findSentenceWithLongestWord(Component textComposite) {
-        if (textComposite.getElementType() != TEXT && textComposite.getElementType() != PARAGRAPH) {
+        if (textComposite.getElementType() != TEXT) {
             return Optional.empty();
         }
 
         int wordSize = 0;
         Component result = null;
-        for (Component component : textComposite.getChildren()) {
-            if (component.getElementType() == PARAGRAPH) {
-                for (Component sentence : component.getChildren()) {
-                    int size = longestWordInSentence(sentence);
-                    if (size > wordSize) {
-                        result = sentence;
-                    }
+        for (Component paragraph : textComposite.getChildren()) {
+            for (Component sentence : paragraph.getChildren()) {
+                int size = longestWordInSentence(sentence);
+                if (size > wordSize) {
+                    wordSize = size;
+                    result = sentence;
                 }
-                continue;
-            }
-            int size = longestWordInSentence(component);
-            if (size > wordSize) {
-                result = component;
             }
         }
 
@@ -106,6 +100,7 @@ public class TextServiceImpl implements TextService {
             for (Component element : lexeme.getChildren()) {
                 if (element.getElementType() == WORD) {
                     int size = element.getChildren().size();
+                    logger.log(Level.DEBUG, "word -> \'" + element.convertToString() + "\' size -> " + size);
                     if (size > wordSize) {
                         wordSize = size;
                     }

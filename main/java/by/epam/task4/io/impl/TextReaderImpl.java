@@ -6,17 +6,16 @@ import by.epam.task4.io.TextReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.stream.Stream;
 
 public class TextReaderImpl implements TextReader {
+    private final static String DELIMITER = " ";
+
     @Override
     public String read(String path) throws CustomException {
-        try {
+        try (Stream<String> lines = Files.lines(Paths.get(path))) {
             StringBuilder result = new StringBuilder();
-            List<String> lines = Files.readAllLines(Paths.get(path));
-            for (String line : lines) {
-                result.append(line);
-            }
+            lines.forEach(line -> result.append(DELIMITER).append(line));
             return result.toString();
         } catch (IOException e) {
             throw new CustomException("smth wrong with file - " + path, e);
