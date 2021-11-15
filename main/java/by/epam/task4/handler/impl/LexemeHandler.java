@@ -11,8 +11,9 @@ import static by.epam.task4.entity.ElementType.*;
 
 public enum LexemeHandler implements ComponentHandler {
     INSTANCE;
-    private static final String WORD_REGEX = "(?U)(^\\p{Punct}*)([\\w-]+)(\\p{Punct}*$)";
+    private static final String WORD_REGEX = "(?U)(^\\p{Punct}*)(\\w[\\w-']*)(\\p{Punct}*$)";
     private static final String SENTENCE_PUNCTUATION_REGEX = "\\.{1,3}|[?!,;:]$";
+    private static final String EMPTY_CHARACTER = "";
     private final SymbolHandler symbolHandler = SymbolHandler.INSTANCE;
     private final WordHandler wordHandler = WordHandler.INSTANCE;
     private final ExpressionHandler expressionHandler = ExpressionHandler.INSTANCE;
@@ -30,12 +31,12 @@ public enum LexemeHandler implements ComponentHandler {
                 if (i == wordGroup) {
                     String word = wordMatcher.group(i);
                     composite.add(wordHandler.handleRequest(word));
-                } else {
-                    String punctuation = wordMatcher.group(i);
-                    if (!punctuation.isEmpty()) {
-                        for (String symbol : punctuation.split(SYMBOL.getDelimiter())) {
-                            composite.add(symbolHandler.handleRequest(symbol));
-                        }
+                    continue;
+                }
+                String punctuation = wordMatcher.group(i);
+                if (!punctuation.isEmpty()) {
+                    for (String symbol : punctuation.split(SYMBOL.getDelimiter())) {
+                        composite.add(symbolHandler.handleRequest(symbol));
                     }
                 }
             }
@@ -47,7 +48,7 @@ public enum LexemeHandler implements ComponentHandler {
                 for (String symbol : punctuation) {
                     composite.add(symbolHandler.handleRequest(symbol));
                 }
-                input = expression.replaceAll(SENTENCE_PUNCTUATION_REGEX, "");
+                input = expression.replaceAll(SENTENCE_PUNCTUATION_REGEX, EMPTY_CHARACTER);
             }
             composite.add(expressionHandler.handleRequest(input));
         }

@@ -49,13 +49,8 @@ public class ComponentTest {
         TextComposite text1 = new TextComposite(ElementType.TEXT);
         text1.add(paragraph);
 
-        TextComposite book = new TextComposite(ElementType.TEXT);
-        book.add(text1);
-        book.add(text1);
-
-        String expected = "\n    Hello, world! Hello, world! \n\n";
-        expected += expected;
-        String actual = book.convertToString();
+        String expected = "\n    Hello, world! Hello, world! ";
+        String actual = text1.convertToString();
 
         assertEquals(actual, expected);
     }

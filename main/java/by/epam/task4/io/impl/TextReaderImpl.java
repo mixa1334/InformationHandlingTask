@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class TextReaderImpl implements TextReader {
-    private final static String DELIMITER = " ";
+    private static final String DELIMITER = " ";
 
     @Override
     public String read(String path) throws CustomException {

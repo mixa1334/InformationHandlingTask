@@ -15,28 +15,31 @@ public class SentenceServiceImpl implements SentenceService {
 
     @Override
     public int countVowels(Component sentenceComposite) {
+        if (sentenceComposite.getElementType() != SENTENCE) {
+            return 0;
+        }
         return countLetters(sentenceComposite, VOWEL_REGEX);
     }
 
     @Override
     public int countConsonants(Component sentenceComposite) {
+        if (sentenceComposite.getElementType() != SENTENCE) {
+            return 0;
+        }
         return countLetters(sentenceComposite, CONSONANT_REGEX);
     }
 
     private int countLetters(Component text, String regex) {
         int result = 0;
-        if (text.getElementType() == SYMBOL) {
-            return result;
-        }
         for (Component component : text.getChildren()) {
-            if (component.getElementType() == SYMBOL) {
-                String symbol = component.convertToString();
-                if (symbol.matches(regex)) {
-                    logger.log(Level.DEBUG, "symbol -> " + symbol);
-                    result++;
-                }
-            } else {
+            if (component.getElementType() != SYMBOL) {
                 result += countLetters(component, regex);
+                continue;
+            }
+            String symbol = component.convertToString();
+            if (symbol.matches(regex)) {
+                logger.log(Level.DEBUG, "symbol -> " + symbol);
+                result++;
             }
         }
         return result;

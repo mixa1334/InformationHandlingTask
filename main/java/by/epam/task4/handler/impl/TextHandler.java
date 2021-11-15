@@ -12,7 +12,7 @@ import static by.epam.task4.entity.ElementType.*;
 public enum TextHandler implements ComponentHandler {
     INSTANCE;
     private static final Logger logger = LogManager.getLogger();
-    private static final String PARAGRAPH_DELIMITER_PATTERN = "(?<=[.!?])\\s{4}";
+    private static final String PARAGRAPH_DELIMITER_REGEX = "(?<=[.!?])\\s{4}";
     private final ParagraphHandler paragraphHandler = ParagraphHandler.INSTANCE;
 
     @Override
@@ -20,7 +20,7 @@ public enum TextHandler implements ComponentHandler {
         logger.log(Level.INFO, "text to handle -> " + text);
         TextComposite composite = new TextComposite(TEXT);
         String input = text.strip();
-        for (String paragraph : input.split(PARAGRAPH_DELIMITER_PATTERN)) {
+        for (String paragraph : input.split(PARAGRAPH_DELIMITER_REGEX)) {
             composite.add(paragraphHandler.handleRequest(paragraph));
         }
         logger.log(Level.INFO, "text composite -> " + composite);

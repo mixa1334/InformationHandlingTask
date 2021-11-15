@@ -55,17 +55,18 @@ public class TextServiceImpl implements TextService {
     public int deleteSentencesWithLessWordCount(Component textComposite, int wordCount) {
         int result = 0;
         if (textComposite.getElementType() != TEXT) {
-            return 0;
+            return result;
         }
 
-        for (Component component : textComposite.getChildren()) {
-            int count = countWordsInSentence(component);
-            logger.log(Level.DEBUG, "count of words: " + count + " in sentence -> " + component);
-            if (count < wordCount) {
-                textComposite.remove(component);
-                result++;
+        for (Component paragraph : textComposite.getChildren()) {
+            for (Component sentence : paragraph.getChildren()) {
+                int count = countWordsInSentence(sentence);
+                logger.log(Level.DEBUG, "count of words: " + count + " in sentence -> " + sentence);
+                if (count < wordCount) {
+                    paragraph.remove(sentence);
+                    result++;
+                }
             }
-
         }
         return result;
     }
@@ -106,10 +107,10 @@ public class TextServiceImpl implements TextService {
     private int countWordsInSentence(Component component) {
         int count = 0;
         for (Component sentenceComponent : component.getChildren()) {
-            if (sentenceComponent.getElementType() == WORD) {
-                count++;
-            } else if (sentenceComponent.getElementType() == LEXEME) {
+            if (sentenceComponent.getElementType() == LEXEME) {
                 count += countWordsInSentence(sentenceComponent);
+            } else if (sentenceComponent.getElementType() == WORD) {
+                count++;
             }
         }
         return count;
